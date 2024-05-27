@@ -28,7 +28,24 @@ public class OperationService {
         return operationRepository.findAll();
     }
 
-    // Method to retrieve an operation by its ID
+
+    public Operation updateOperation(Long id, Operation operationDetails)  {
+        Optional<Operation> optionalOperation = operationRepository.findById(id);
+
+        if (optionalOperation.isPresent()) {
+            Operation operation = optionalOperation.get();
+            operation.setOperationReference(operationDetails.getOperationReference());
+            operation.setOperationState(operationDetails.getOperationState());
+            operation.setOrderOperations(operationDetails.getOrderOperations());
+
+            return operationRepository.save(operation);
+        } else {
+            return null;
+        }
+
+    }
+
+
     public Optional<Operation> getOperationById(Long operationId) {
         return operationRepository.findById(operationId);
     }

@@ -1,70 +1,42 @@
 package com.example.importexportservice.MessageModel;
 
-
 import java.util.Date;
 
-public class SupplierMessage {
-
-
+public class OperationMessage {
     private String MessageId;
     private String Message;
     private Date MassageDate ;
 
-    private Long supplierId;
-    private String supplierName;
+    private long OperationId;
+
+
     private String action;
     private String message;
 
 
-    public SupplierMessage(String messageId, String message, Date massageDate, Long supplierId, String supplierName, String action, String message1) {
+
+    public OperationMessage(String messageId, String message, Date massageDate, long operationId, String action, String message1) {
         MessageId = messageId;
         Message = message;
         MassageDate = massageDate;
-        this.supplierId = supplierId;
-        this.supplierName = supplierName;
+        OperationId = operationId;
         this.action = action;
         this.message = message1;
     }
 
-    public SupplierMessage() {
+    public OperationMessage() {
     }
-
 
     @Override
     public String toString() {
-        return "SupplierMessage{" +
+        return "OperationMessage{" +
                 "MessageId='" + MessageId + '\'' +
                 ", Message='" + Message + '\'' +
                 ", MassageDate=" + MassageDate +
-                ", supplierId=" + supplierId +
-                ", supplierName='" + supplierName + '\'' +
+                ", OperationId='" + OperationId + '\'' +
                 ", action='" + action + '\'' +
                 ", message='" + message + '\'' +
                 '}';
-    }
-
-    public Long getSupplierId() {
-        return supplierId;
-    }
-
-    public void setSupplierId(Long supplierId) {
-        this.supplierId = supplierId;
-    }
-
-    public String getSupplierName() {
-        return supplierName;
-    }
-
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
     }
 
     public String getMessageId() {
@@ -89,5 +61,21 @@ public class SupplierMessage {
 
     public void setMassageDate(Date massageDate) {
         MassageDate = massageDate;
+    }
+
+    public long getOperationId() {
+        return OperationId;
+    }
+
+    public void setOperationId(long operationId) {
+        OperationId = operationId;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
     }
 }

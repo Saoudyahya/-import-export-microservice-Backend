@@ -33,22 +33,32 @@ public class SupplierController {
 
     @GetMapping("/{id}")
     public Optional<Supplier> getSupplierById(@PathVariable Long id) {
+
         return supplierService.getSupplierById(id);
     }
 
     @PostMapping
     public Supplier createSupplier(@RequestBody Supplier supplier) {
-        return supplierService.createSupplier(supplier);
+        Supplier newSupplier=supplierService.createSupplier(supplier);
+        publishMessage("CREATE", newSupplier);
+        return newSupplier;
     }
 
     @PutMapping("/{id}")
     public Supplier updateSupplier(@PathVariable Long id, @RequestBody Supplier updatedSupplier) {
-        return supplierService.updateSupplier(id, updatedSupplier);
+
+        Supplier updated = supplierService.updateSupplier(id, updatedSupplier);
+        publishMessage("UPDATE", updated);
+        return updated;
     }
 
     @DeleteMapping("/{id}")
     public void deleteSupplier(@PathVariable Long id) {
-        supplierService.deleteSupplier(id);
+        Supplier deletedSupplier = supplierService.getSupplierById(id).orElse(null);
+        if (deletedSupplier != null) {
+            supplierService.deleteSupplier(id);
+            publishMessage("DELETE", deletedSupplier);
+        }
     }
 
     @DeleteMapping("/notify-product-deletion/{productId}")
@@ -60,13 +70,18 @@ public class SupplierController {
         }
     }
 
-    @PostMapping("/Message")
-    public String publishMessage(@RequestBody SupplierMessage message){
-        message.setMessageId((UUID.randomUUID().toString()));
+    private void publishMessage(String action, Supplier supplier) {
+        SupplierMessage message = new SupplierMessage();
+        message.setAction(action);
+        message.setSupplierId(supplier.getSupplierId());
+        message.setSupplierName(supplier.getSupplierName());
+        message.setMessageId(UUID.randomUUID().toString());
+        message.setMessage(" supplier: " + supplier.getSupplierName()+" with id:"+supplier.getSupplierId()+" from: "+ supplier.getCountry()+ " / " +supplier.getRegion()+" have been "+ action ); // Set the Message field based on the action
         message.setMassageDate(new Date());
-        template.convertAndSend(MQConfig.IMPORT_EXPORT_TOPIC_EXCHANGE,MQConfig.ROUTING_KEY,message);
-
-        return "Message published";
+        template.convertAndSend(MQConfig.IMPORT_EXPORT_TOPIC_EXCHANGE, MQConfig.ROUTING_KEY, message);
     }
+
+
+
 
 }

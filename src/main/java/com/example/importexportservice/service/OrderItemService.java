@@ -35,13 +35,13 @@ public class OrderItemService {
         return orderItemRepository.findById(id);
     }
 
-    // Method to update an order item
+ 
     public OrderItem updateOrderItem(Long id, OrderItem updatedOrderItem) {
         if (orderItemRepository.existsById(id)) {
             updatedOrderItem.setId(id);
             return orderItemRepository.save(updatedOrderItem);
         } else {
-            return null; // or throw an exception
+            return null;
         }
     }
 

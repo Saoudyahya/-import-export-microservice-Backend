@@ -5,14 +5,15 @@ pipeline {
         COMPOSE_FILE = 'docker-compose.yml'
         DOCKERHUB_CREDENTIALS = credentials('iyminds-dockerhub')
         DOCKERHUB_REPO = 'iyminds/import-export-microservice'
-        IMAGE_TAG = 'latest' 
+        IMAGE_TAG = 'latest'
+        GITHUB_CREDENTIALS = credentials('jenkins-import-export') // Replace 'your-github-credentials-id' with the actual ID of your GitHub credentials
     }
 
     stages {
         stage('Checkout') {
             steps {
-               
-                git 'https://github.com/Saoudyahya/-import-export-microservice-Backend'
+                // Checkout code from the repository using GitHub credentials
+                git credentialsId: env.GITHUB_CREDENTIALS, url: 'https://github.com/Saoudyahya/import-export-microservice-Backend.git'
             }
         }
         

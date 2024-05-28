@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  spring-boot-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spring-boot-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/import-export-service
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: yahyasd56
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://localhost:8761/eureka/
+      MANAGEMENT_TRACING_SAMPLING_PROBABILITY: 1.0
+    ports:
+      - "9090:9090"
+    depends_on:
+      - postgres
+
+
+
+  postgres:
+    image: postgres
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: import-export-service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yahyasd56
+    ports:
+      - "5432:5432"
+

@@ -1,27 +1,29 @@
 pipeline {
     agent any
-    
+
     environment {
         COMPOSE_FILE = 'docker-compose.yml'
         DOCKERHUB_CREDENTIALS = credentials('iyminds-dockerhub')
         DOCKERHUB_REPO = 'iyminds/import-export-microservice'
         IMAGE_TAG = 'latest'
-        GITHUB_CREDENTIALS = credentials('jenkins-import-export') // Replace with your GitHub PAT credentials ID
+        GIT_CREDENTIALS_ID = 'githubCredentials' // The ID of the stored credentials in Jenkins
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Verify that GitHub credentials are retrieved
                 script {
-                    withCredentials([string(credentialsId: env.GITHUB_CREDENTIALS, variable: 'GITHUB_PAT')]) {
-                        echo "Retrieved GitHub PAT successfully."
-                        sh """
-                            git config --global credential.helper 'cache --timeout=3600'
-                            git config --global url.https://oauth2:$GITHUB_PAT@github.com/.insteadOf https://github.com/
-                            git clone https://github.com/Saoudyahya/import-export-microservice-Backend.git
-                        """
-                    }
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: '*/main']],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [],
+                        submoduleCfg: [],
+                        userRemoteConfigs: [[
+                            url: 'https://github.com/Saoudyahya/-import-export-microservice-Backend',
+                            credentialsId: env.GIT_CREDENTIALS_ID
+                        ]]
+                    ])
                 }
             }
         }

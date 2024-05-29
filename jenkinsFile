@@ -6,7 +6,8 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('iyminds-dockerhub')
         DOCKERHUB_REPO = 'iyminds/import-export-microservice'
         IMAGE_TAG = 'latest'
-        GIT_CREDENTIALS_ID = 'githubCredentials' // The ID of the stored credentials in Jenkins
+        GIT_CREDENTIALS_ID = 'githubCredentials'
+         def mvnHome = tool 'maven-3.5.2'
     }
 
     stages {
@@ -30,10 +31,9 @@ pipeline {
 
         stage('Build Spring Boot App') {
             steps {
-                // Build the Spring Boot application
-                 sh 'ls -all'
 
-                sh '/import-export-microservice-pipeline/mvnw clean package -DskipTests'
+                 sh 'ls -all'
+               sh "'${mvnHome}/bin/mvn' clean install"
 
             }
         }

@@ -32,7 +32,9 @@ pipeline {
             steps {
                 // Build the Spring Boot application
                  sh 'ls -all'
-                sh './mvnw clean package -DskipTests'
+
+                sh '/import-export-microservice-pipeline/mvnw clean package -DskipTests'
+
             }
         }
 

@@ -12,9 +12,10 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout code from the repository using GitHub PAT
+                // Verify that GitHub credentials are retrieved
                 script {
                     withCredentials([string(credentialsId: env.GITHUB_CREDENTIALS, variable: 'GITHUB_PAT')]) {
+                        echo "Retrieved GitHub PAT successfully."
                         sh """
                             git config --global credential.helper 'cache --timeout=3600'
                             git config --global url.https://oauth2:$GITHUB_PAT@github.com/.insteadOf https://github.com/
@@ -24,40 +25,41 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Build Spring Boot App') {
             steps {
                 // Build the Spring Boot application
                 sh './mvnw clean package -DskipTests'
             }
         }
-        
+
         stage('Build Docker Images') {
             steps {
                 // Build Docker images using Docker Compose
                 sh 'docker-compose build'
             }
         }
-        
+
         stage('Run Containers') {
             steps {
                 // Run Docker containers using Docker Compose
                 sh 'docker-compose up -d'
             }
         }
-        
+
         stage('Integration Tests') {
             steps {
                 // Run integration tests, if any
                 sh './mvnw verify'
             }
         }
-        
+
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    // Get Docker Hub credentials
+                    // Verify that Docker Hub credentials are retrieved
                     withCredentials([usernamePassword(credentialsId: env.DOCKERHUB_CREDENTIALS, usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                        echo "Retrieved Docker Hub credentials successfully."
                         // Log in to Docker Hub
                         sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
                         

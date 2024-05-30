@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   spring-boot-app:
+    image: import-export-microservice:latest
     build:
       context: .
       dockerfile: Dockerfile

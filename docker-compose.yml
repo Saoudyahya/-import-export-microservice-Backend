@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: iyminds/import-export-microservice:latest
+    container_name: import-export-microservice
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/import-export-service
       SPRING_DATASOURCE_USERNAME: postgres

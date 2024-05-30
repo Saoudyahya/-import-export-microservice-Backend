@@ -2,10 +2,11 @@ version: '3.8'
 
 services:
   spring-boot-app:
+    image: import-export-service:latest
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: spring-boot-app
+    container_name: import-export-service
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/import-export-service
       SPRING_DATASOURCE_USERNAME: postgres
